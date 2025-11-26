@@ -207,23 +207,115 @@ def add(a: int, b: int, sidenote: str) -> int:
 ### 主要な出来事
 
 MCP のセキュリティインシデントについては[こちらのブログ](https://authzed.com/blog/timeline-mcp-breaches)に時系列形式でまとめられています。
-翻訳ベースでこれをまとめてみます。
+これをベースにいくつかピックアップして、ソースを辿りながら調査してみます。
 
-2025/4: WhatsAPP MCP 攻撃
+__WhatsApp MCP 攻撃 (検証)__
 
-2025/5: GitHub MCP プロンプトインジェクション
+<u>ソース</u>
+- https://invariantlabs.ai/blog/whatsapp-mcp-exploited
+- 実際に起きた事件ではなく、あくまで脆弱性が検証された内容になります
 
-2025/6: Asana MCP サーバーバグ
+<u>攻撃手法</u>
 
-2025/7: mcp-remote コマンドインジェクション
+- 無害なツールを装って提供し、一度承認されたツールの説明文を後から差し替えて攻撃を実施 (rug pull attack)
+  - 参考: https://arxiv.org/abs/2506.01333
 
-2025/8: Filesystem MCP サーバーの脆弱性
+<u>被害内容</u>
 
-2025/9: 悪意ある MCP サーバーの配布
+- WhatsApp の送信先を別のプロキシ番号に書き換え、ユーザーのチャット履歴を送信して漏洩
 
-225/10: Smithery ホスティング侵害
+<u>主たる原因</u>
 
-<u>__上記インシデントに共通するパターン__</u>
+- ツール説明の変更がユーザーには通知されないクライアント仕様になっており、これにより rug pulls が成立
+
+<u>コメント</u>
+
+- UI をハックし、右側に極端にスクロールしないと隠れた指示文を見つけにくい、なども紹介がありました
+- コードマークダウンなどではお馴染みだと思うのですが、ソースブログでもその様子が紹介されています
+- MCP サーバー利用者の観点で、攻撃手法を知る機会になる良い検証だと感じられます
+
+<hr>
+
+__Asana MCP サーバーバグ__
+
+<u>ソース</u>
+- https://www.upguard.com/blog/asana-discloses-data-exposure-bug-in-mcp-server
+
+
+<u>攻撃手法</u>
+- 攻撃はなく、開発した MCP サーバーに不具合があった
+
+<u>被害内容</u>
+- リスク報告とともにサーバーを停止しており、実被害は報告されていない
+- 他組織のプロジェクトやタスクなどが参照可能な状態になっていた可能性
+
+
+<u>主たる原因</u>
+- 構築サーバーのバグ
+- 主たる欠陥内容などは報告されていません
+
+<u>コメント</u>
+- 5/1 に Asana が MCP サーバーを公開し、6/4 にはサーバーを停止しています
+- MCP サーバー構築者側の事故という形でのケースになります
+
+<hr>
+
+__mcp-remote OS コマンドインジェクション__
+
+<u>ソース</u>
+- https://nvd.nist.gov/vuln/detail/CVE-2025-6514
+- https://www.docker.com/blog/mcp-horror-stories-the-supply-chain-attack/
+
+<u>脆弱性報告</u>
+- セキュリティ分野で著名な、米国政府機関である NIST から `mcp-remote` についての脆弱性が報告 (CVE-2025-6514)
+- `mcp-remote`: ローカル MCP クライアントがリモートサーバーに接続するための OAuth proxy で、npm でインストールが可能なパッケージ
+- Cloudflare, Hugging Face Auth0 などの連携ガイドで採用されており、それまでに 43万以上のダウンロードがなされていた
+- v0.0.5-0.1.15 にかけて[脆弱性が報告](https://jfrog.com/blog/2025-6514-critical-mcp-remote-rce-vulnerability/)され、v0.1.16 以降では修正されているようです
+
+<u>被害内容</u>
+- 特に報告なし
+- 想定攻撃者: 悪意のあるMCPサーバー運営者
+- 想定被害者: `mcp-server` で MCP サーバーに接続するクライアント
+- 想定攻撃内容: 任意のコマンド実行、APIキーやSSHキー、Gitリポジトリの内容などの窃取
+
+
+<u>主たる原因</u>
+- OAuth エンドポイントを検証せずに OS に渡す設計不備
+- サーバーが提供する `authorization_endpoint` をURL検証・プロトコル制限なしで受け入れ、`open()`経由で OS ハンドラに渡すため、コマンドインジェクションが成立
+```js
+// Vulnerable code pattern in mcp-remote (from auth.ts)
+const authUrl = oauthConfig.authorization_endpoint;
+// No validation of URL format or protocol
+await open(authUrl.toString()); // Uses 'open' npm package
+```
+
+<hr>
+
+__悪意ある MCP サーバーの配布__
+
+<u>ソース</u>
+- https://www.itpro.com/security/a-malicious-mcp-server-is-silently-stealing-user-emails
+
+<u>攻撃手法</u>
+- Postmark MCP Server を装う偽の悪意ある MCP サーバーが公開
+- 正規サーバーと同名で npm に公開し、開発者の誤認を誘引
+
+
+<u>被害内容</u>
+- AI エージェントが処理したすべてのメールを攻撃者の個人サーバーへBCC送信する動作が仕込まれていた
+- 同パッケージは週あたりやく1500回ほどダウンロードされ、企業規模によっては1日で3000-15000件ものメールが流出し得たと報告
+
+
+<u>主たる原因</u>
+- MCP サーバーに過度な権限が付与されていた
+- npm 等のサプライチェーンを対象にすることで、検知が難しく、かつ広範に展開されやすい形式だった
+
+<u>コメント</u>
+- MCP に関連したもので、初めて実被害が報告されたケースになっています
+- すでに問題のパッケージは削除済みのようです
+
+
+__上記インシデントに共通するパターン__
 
 - ローカル開発ツールが RCE (remote code execution) の脆弱性に
 - 過剰な権限を持つ API トークンが破滅的な被害につながる
