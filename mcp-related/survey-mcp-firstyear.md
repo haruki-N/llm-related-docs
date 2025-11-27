@@ -2,7 +2,7 @@
 
 - MCP の公開から一年が経過したので、その変遷や各社事例等の動向を調査し、まとめる
 - この記事は各社 Deep Research を複数組み合わせながら、人間がキュレーションした上で人手で執筆
-- まとめている期間に公式からも[1年記念ブログ](https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/)が出たので、これも組み合わせ構成をとる
+- まとめている期間に公式からも[1年記念ブログ](https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/)が出たので、これも参考にする
 
 
 # MCP を巡る1年の動向
@@ -38,7 +38,7 @@
 - 認証は標準化されていない
 - Tools, Resources, Prompts などの基本スキーマが提唱
 - 初期提案時は remote MCP server は欠けた存在
-  - 現状は当たり前のように存在する remote MCP server も[提案当初](https://www.anthropic.com/news/model-context-protocol#:~:text=We%27ll%20soon%20provide%20developer%20toolkits%20for%20deploying%20remote%20production%20MCP%20servers%20that%20can%20serve%20your%20entire%20Claude%20for%20Work%20organization.)はありませんでした
+  - 現状は当たり前のように存在する remote MCP server も[提案当初](https://www.anthropic.com/news/model-context-protocol#:~:text=We%27ll%20soon%20provide%20developer%20toolkits%20for%20deploying%20remote%20production%20MCP%20servers%20that%20can%20serve%20your%20entire%20Claude%20for%20Work%20organization.)はなかった
   > We'll soon provide developer toolkits for deploying remote production MCP servers that can serve your entire Claude for Work organization.
 
 <hr>
