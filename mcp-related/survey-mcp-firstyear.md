@@ -11,7 +11,7 @@
 ### リリースと初期構成
 - 2024/11/25: MCPがAnthropicより発表
   - https://www.anthropic.com/news/model-context-protocol
-  - ねらい: AI アシスタント とデータソースを接続する「$M \times N$問題」を「$M＋N$問題」に削減
+  - ねらい: AI アシスタント とデータソースを接続する $M \times N$ 問題を $M＋N$ 問題に削減
   - 着想: MS が提唱していた LanguageServerProtocol([LSP](https://microsoft.github.io/language-server-protocol/))をAI領域に拡張
 
 - 基本アーキテクチャ: https://modelcontextprotocol.io/docs/learn/architecture
@@ -207,6 +207,8 @@ def add(a: int, b: int, sidenote: str) -> int:
 
 MCP のセキュリティインシデントについては[こちらのブログ](https://authzed.com/blog/timeline-mcp-breaches)に時系列形式でまとめられている。
 これをベースにいくつかピックアップして、ソースを辿りながら調査する。
+
+<hr>
 
 __WhatsApp MCP 攻撃 (検証)__
 
