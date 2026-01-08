@@ -100,6 +100,7 @@
   - タスクを要求する Requestor とタスクを実行する Receiver からなる
   - Requestor-driven な設計になっており、発行されたタスク ID を利用して結果をポーリング
 
+<hr>
 
 ### Linux Foundation への寄贈
 2025年12月10日に、MCPは Linux Foundation 傘下の [AAIF](https://aaif.io/) (Agentic AI Foundation) のもとで管理される形で寄贈された
