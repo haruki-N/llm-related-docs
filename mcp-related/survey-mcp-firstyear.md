@@ -101,6 +101,15 @@
   - Requestor-driven な設計になっており、発行されたタスク ID を利用して結果をポーリング
 
 
+### Linux Foundation への寄贈
+2025年12月10日に、MCPは Linux Foundation 傘下の [AAIF](https://aaif.io/) (Agentic AI Foundation) のもとで管理される形で寄贈された
+- AAIF 自体がこの寄贈と併せて[新設された](https://aaif.io/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation-aaif-anchored-by-new-project-contributions-including-model-context-protocol-mcp-goose-and-agents-md/)もの
+  - 設立趣旨は Agentic AI の標準機構などを中立的でオープンな財団の下で進めること
+- この時点で創設プロジェクトとして Anthropic の `MCP`, Block の `goose`, OpenAI の `AGENTS.md` を管理している
+
+- 発表ブログ: https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation
+![img-one-year-of-mcp](materials/one-year-of-mcp.png)
+
 ## 世間の動向
 
 ここでは世間的な動向をタイムラインでまとめてみる
