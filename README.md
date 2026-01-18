@@ -1,1 +1,1 @@
-# llm_reading_track
+# 個人用のドキュメントメモ記録
