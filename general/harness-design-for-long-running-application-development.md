@@ -17,3 +17,18 @@
   - 先行していた取り組みから、ハーネスの取り付けかたとして「ビルドを扱いやすいチャンクに分割すること」「構造化されたアーティファクト（成果物ファイル）を使って、セッションを跨いでコンテキストを引き継げるようにすること」を学んでいたので、これらも活用
     - したがって最終的には上記の2つのエージェントだけでなく、`planner` のエージェントも加えた3体の構造を取ることで、長時間・フルスタック・高品質な自律コーディングを実現した
 
+## 1. Why naive implementations fall short
+
+## 2. Frontend desing: making subjective quality gradable
+
+## 3. Scalling to full-stack coding
+
+## 4. Running the harness
+
+## 5. Iterating on the harness
+
+## 6. Removing the sprint construct
+
+## 7. Results from the updated harness
+
+## 8. What comes next
