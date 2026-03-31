@@ -116,5 +116,12 @@
     - この辺りの知識は比較的最近のもので、Claude の学習データではカバーが薄い: かなりの試行錯誤を要したが、十分にチューニングすることで正しくエージェントを構築できるようになった
 
 ## 7. Results from the updated harness
+- 簡素化したハーネスを検証するため、作曲・録音・曲のミキシングが可能な Digital Audio Workstation (DAW) を生成させた
+- お題: _Build a fully featured DAW in the browser using the Web Audio API_
+- `Planner` + `Build-QA` x 3 round 分の実行: 時間にして4時間ほどで $124 のコスト
+  - `Generator` を Opus 4.5 にしても、長時間実装時は抜けがあり、機能的なギャップなどをうまく `evaluator` が指摘できていた
+- 最終成果物はプロダクションレベルには遠く及ばないまでも、それなりに動いた
+  - DAW でどんな音が鳴っているかをモデルは知覚できないので、QA のフィードバックも難しい部分があったと考えられる
+  - ただ、必要なコア機能は全て実装されており、それらの機能を組み合わせて短い楽曲を作ることができた
 
 ## 8. What comes next
