@@ -91,6 +91,12 @@
   - エージェント間のコミュニケーションはファイル経由で行われた。このようにすることで合意形成のイテレーションも回しやすく、その後の実装やQAにも合意内容を引き継ぎやすくなる
 
 ## 4. Running the harness
+- ハーネスの初版では Opus 4.5 を使い、ハーネスの有無でどう振る舞いが変化するかを検証した
+- お題: _Create a 2D retro game maker with features including a level editor, sprite editor, entity behaviors, and a plyaable test mode._
+- ハーネスなしとありを比べると、タスク時間は 20min から 6hours に伸び、コストも $9 から $200 分の稼働となった
+- この伸びの分、最終的な成果物のしつも明確に異なるクオリティに
+  - 見た目もさることながら、機能性における完成度などハーネスの威力を感じられる仕上がりに
+- 具体的な仕上がり内容や注目どころは元記事参照: https://www.anthropic.com/engineering/harness-design-long-running-apps#:~:text=implementation%20too%20early.-,Running%20the%20harness,-For%20the%20first
 
 ## 5. Iterating on the harness
 
