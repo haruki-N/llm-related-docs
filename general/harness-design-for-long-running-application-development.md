@@ -99,6 +99,12 @@
 - 具体的な仕上がり内容や注目どころは元記事参照: https://www.anthropic.com/engineering/harness-design-long-running-apps#:~:text=implementation%20too%20early.-,Running%20the%20harness,-For%20the%20first
 
 ## 5. Iterating on the harness
+- 検証したハーネスの性能は良いことがわかったが「重くて遅くて高コスト」という問題があった
+- Next step としてパフォーマンス低下せずにハーネスを簡素化するというもの設定
+  - 前提として「ハーネスの各要素はモデル単体ではできないことを補完する」というのを置いた設計にすべき
+  - 従ってモデル性能の向上に伴って、この仮定は定期的に疑う必要がある: 当時は有効だった足場 (scaffolding) が過剰になる・ワークしなくなる可能性がある
+  - [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) のポストでも _"find the simplest solution possible, and only increase complexity when needed"_ という原則を敷いている
+- ちょうどこの再検討タイミングで Opus 4.6 がリリースされ、「長時間のプランニングがうまい」「大きなコードベースでも安定して動ける」「自己デバッグ・コードレビューが強い」「長コンテキストでの情報管理が向上」といった能力が押し出され、まさに以前ハーネスが補完していた部分をモデル自身が自立できるようになっている
 
 ## 6. Removing the sprint construct
 
