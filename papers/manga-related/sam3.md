@@ -7,3 +7,37 @@ source: https://scontent-nrt1-1.xx.fbcdn.net/v/t39.2365-6/585895112_150248226087
   - PCS の発展のため、4M 個のユニークなコンセプトラベルを使って高品質なデータを生成するデータエンジンを作成（画像、動画の両方が対象で、ハードネガティブ事例も含める）
 - SAM3 はバックボーンを共有する画像レベルの検出器、メモリーベースの動画トラッカーを構成要素として持つ
   - Recognition と localization は presence head の予測を利用することで分離されており、検出精度の向上を狙う
+    - Recognition (認識): 何が映っているかを当てるタスクで、いわゆる画像分類に近い。出力はラベル（カテゴリ）
+    - Localization (位置特定): 対象物がどこに映っているかを当てるタスク。出力は座標・領域
+
+# Intro
+- SAM シリーズにおいて Promptable Visual Segmentation (PVS) というアプローチが導入された
+  - PVS では、点やbbox, マスクなど(ある種のビジュアル指示)をオブジェクトに与えるというやり方で、性能面はある種のブレイクスルーになった
+  - しかし、画像中に現れる全てのインスタンスを検出するのが苦手だったりなどの制約があることが確認された
+
+- これを改善するため、SAM3 では Promptable Concept Segmentation (PCS) を導入し、タスクとして定義
+  - PCS task: テキスト and/or 画像 exampler を入力として受け取り、全てのオブジェクトがその概念に合致するかどうかを予測するタスク（動画の場合はオブジェクトアイデンティティも一貫させながら）のタスクになる
+  - アトミックな視覚概念への認識に集中すべく、SAM3 側ではシンプルなテキストプロンプト (赤いリンゴ、横縞の猫とか)に限定している: ただ、MLLM を組み合わせることでより複雑なテキストプロンプトや推論が必要なケースにも拡張しうることを確認
+
+![pvs-vs-pcs](materials/pvs_pcs.png)
+
+![sam3-example](materials/sam3_examples.png)
+
+
+- SAM3 の構成は以下
+  - vision encoder を共有する detector と tracker
+    - detecor: DETR-based のモデルで、テキスト、ジオメトリ、例示画像によって条件付けが可能
+    - tracker: SAM2 の transformer encoder-decoder arch. を継承し、動画のセグメンテーションとインタラクティブなリファインメントを実現
+  - 物体の存在判定を行う presence head
+    - これによって recognition と localization のタスクを分割可能にする
+    - ハードネガティブでも学習を行い、オープンエンドな語彙に対応する
+
+- 学習データの構築には、human/model-in-the-loop なデータエンジンを構築し、大規模で広範な学習データをアノテーション
+- 従来と比較して大きく3つの改善を実行
+  1. media curation: より巨大で広範なメディアドメインをキュレーション
+  2. label curation: オントロジーやMLLMをあのテータとして利用することでラベルの多様性や難易度を向上
+  3. label verification: fine-tuned MLLM を利用して、人間と同水準で品質チェックを自動化
+
+- Segment Anything with Concepts (SA-Co) を PCS 用のベンチマークとして作成
+- 実験の結果、SAM3 は zero-shot mask AP で大幅な性能向上を確認
+- また、アブレーションによって、バックボーンの選択、presence headの追加、ハードネガティブを利用した学習のそれぞれが性能向上に寄与していることを確認
